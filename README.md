@@ -24,6 +24,7 @@ Random Forest
 Clearly overfit the training set. Will require pruning or rducing the max_depth to regularize
     
 SVC
+    
     F1 score for training set: 
     F1 score for test set: 
     
