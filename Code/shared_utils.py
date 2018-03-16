@@ -45,7 +45,7 @@ class ArrayCaster(BaseEstimator, TransformerMixin):
     def transform(self, data):
         return np.transpose(np.matrix(data))
 
-def pipe(corpus):
+def pipe():
     num_pipeline = Pipeline([
             ('selector', DataFrameSelector('word_values')),
             ('vect', TfidfVectorizer(max_df=0.95, min_df=2, max_features=1037929)),
@@ -63,4 +63,5 @@ def pipe(corpus):
             ("num_pipeline", num_pipeline),
               #("cat_pipeline", cat_pipeline),
         ])
-    return full_pipeline.fit_transform(corpus)
+    return full_pipeline
+
