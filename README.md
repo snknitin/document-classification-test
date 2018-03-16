@@ -53,7 +53,7 @@ Using Flask for REST based api calls
 
     python runner.py
 
-will enable the service on the localhost='127.0.0.1' on port=4000
+will enable the service on the localhost='127.0.0.1' on port=4000. The service requests a document's content hashed in the same way the dataset was. Clicking predict button will display which class the document belongs to. 
 
 Pushing it to AWS Lambda using Zappa and aws-cli to becoem a serverless function
 
