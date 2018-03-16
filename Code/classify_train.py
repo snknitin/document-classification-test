@@ -1,5 +1,7 @@
 import os
 from time import time
+from sklearn.model_selection import StratifiedShuffleSplit
+
 import data_preprocess as dv
 import pandas as pd
 #import xgboost as xgb
@@ -9,14 +11,19 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.svm import SVC
 from sklearn.metrics import f1_score
+from sklearn.externals import joblib
+#import pickle
 
 class Solution(object):
     def __init__(self):
+        print("Initializing Data Loader...")
+        # Load dataframe and process it
+        self.dataframe=dv.preprocess(os.path.join(os.getcwd(),"shuffled-full-set-hashed.csv"))
+        print("Load Complete")
+        # Create train and test sets
+       # self.X_train,self.X_test,self.y_train,self.y_test= dv.create_train_test(self.dataframe)
+        print("Created Train(90%) and Test(10%) Stratified splits")
 
-        self.X_train,self.X_test,self.y_train,self.y_test,self.dataframe_all=dv.preprocess(os.path.join(os.getcwd(),"shuffled-full-set-hashed.csv"))
-
-    def visualize(self):
-        dv.visualization(self.X_test,self.y_test)
 
     def train_classifier(self,clf):
         ''' Fits a classifier to the training data. '''
@@ -30,7 +37,7 @@ class Solution(object):
         print("Trained model in {:.4f} seconds".format(end - start))
         return clf
 
-    def predict_labels(clf, features, target):
+    def predict_labels(self,clf,features, target):
         ''' Makes predictions using a fit classifier based on F1 score. '''
 
         # Start the clock, make predictions, then stop the clock
@@ -47,17 +54,18 @@ class Solution(object):
         ''' Train and predict using a classifer based on F1 score. '''
 
         # Indicate the classifier and the training set size
-        #print("Training a {} using a training set size of {}. . .".format(clf.__class__.__name__, len(self.X_train)))
+        print("Training a Classifier")
 
         # Train the classifier
-        self.train_classifier(clf)
+        trained_clf=self.train_classifier(clf)
 
+        print("Finished Training")
         # Print the results of prediction for both training and testing
-        f1, acc = self.predict_labels(clf, self.X_train, self.y_train)
+        f1, acc = self.predict_labels(trained_clf,self.X_train,self.y_train)
         print(f1, acc)
         print("F1 score and accuracy score for training set: {:.4f} , {:.4f}.".format(f1, acc))
 
-        f1, acc = self.predict_labels(clf, self.X_test, self.y_test)
+        f1, acc = self.predict_labels(trained_clf,self.X_test,self.y_test)
         print("F1 score and accuracy score for test set: {:.4f} , {:.4f}.".format(f1, acc))
 
     # def grid_search(self):
@@ -99,5 +107,12 @@ class Solution(object):
 
 if __name__=="__main__":
     s=Solution()
-    s.train_predict(s.train_classifier(SVC(random_state = 912, kernel='rbf')))
+    trained_clf=s.train_predict(LogisticRegression(C=14, solver='lbfgs',multi_class='multinomial',random_state = 42))
+    #trained_clf = s.train_predict(RandomForestClassifier(n_estimators=100))
+    #trained_clf = s.train_predict(SVC(C=10.0, kernel=’rbf’, degree=3, gamma=0.001))
+    # trained_clf = s.train_predict(XGBClassifier())
+    #trained_clf=joblib.dump(trained_clf,'classifier_randforest.pkl',protocol=2)
+
+
+
 
