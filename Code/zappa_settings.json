@@ -1,11 +1,11 @@
 {
-    "dev": {
+    "production": {
         "app_function": "runner.app", 
         "aws_region": "us-west-2", 
         "profile_name": "default", 
-        "project_name": "code",
-        "runtime": "python2.7",
-        "s3_bucket": "docclassify",
-        "slim_handler":"True"
+        "project_name": "code", 
+        "runtime": "python2.7", 
+        "s3_bucket": "doccodereview",
+        "slim_handler": "True"
     }
 }
